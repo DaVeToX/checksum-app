@@ -1,0 +1,23 @@
+{
+  "name": "checksum-app",
+  "version": "1.0.0",
+  "description": "This is a spare time project, where I want to implement a small app that runs the well known checksum problem",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/app/app.js",
+    "test": "mocha src/tests/test.js",
+    "swagger": "swagger-ui-watcher --path ./api/oneapi.yaml --port 3001"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "chai": "5.0.0",
+    "mocha": "10.2.0",
+    "swagger-ui-watcher": "2.1.13"
+  }
+}
