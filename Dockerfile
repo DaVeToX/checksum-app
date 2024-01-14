@@ -1,11 +1,16 @@
 FROM node:14-alpine
 WORKDIR /usr/src/app
-COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
+COPY ["package.json", "package-lock.json*", "./"]
 RUN npm install 
-COPY . .
-# RUN npm test
-EXPOSE 3001
 RUN chown -R node /usr/src/app
+# Run the application as a non-root user.
 USER node
-# Start the app
-CMD ["node", "src/app.js"]
+
+# Copy the rest of the application's source code.
+COPY . .
+
+# expose port 3000 which the app listens on
+EXPOSE 3000
+
+# Run the app.
+CMD node src/app.js
