@@ -1,5 +1,7 @@
 var express = require("express");
-var bodyParser = require('body-parser');
+var bodyParser = require("body-parser");
+
+var checksum = require("./checksumCalculation/checksum");
 // const { compile } = require('openapi-to-json-schema');
 // var swaggerUi = require('swagger-ui-express');
 // const yaml = require('yamljs');
@@ -15,63 +17,102 @@ app.use(bodyParser.json());
 // Swagger-UI integration
 // app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(apiSpec));
 
-app.post("/checksum", (req, res) => {
+app.post("/checksumSinglePair", (req, res) => {
+  try {
+    var { listA, listB, target } = req.body;
+    var checks = runChecks(listA, listB, target);
+
+    if (checks.checkSuccessfull === false) {
+        return res.status(400).json({ error: checks.error });
+    } 
+    
+    const result = checksum.runCheckSumSinglePair(listA, listB, target);
+
+    return res.json({ result });
+  } catch (error) {
+    return res.status(500).json({ error: error.toString() });
+  }
+});
+
+app.post("/checksumMultiPair", (req, res) => {
     try {
         var { listA, listB, target } = req.body;
-
-        // Run checks against the data from request data
-        // unnecessary checks, as already checked in api spec
-        // check if all needed data is present
-        if (!listA || !listB || !target) {
-            return res.status(400).json({ error: 'Missing/Wrong data in the request' });
-        }
-        // check if both lists contains only numbers and not listA should not empty
-        if ((!listA.every((num) => typeof num === 'number')) || (listA.length == 0)) {
-            return res.status(400).json({ error: 'List A should contain only numbers' });
-        }
-        if ((!listB.every((num) => typeof num === 'number')) || (listB.length == 0)) {
-            return res.status(400).json({ error: 'List B should contain only numbers' });
-        }
-        // check if target is a number
-        if (typeof target !== 'number') {
-            return res.status(400).json({ error: 'Target should be a number' });
-        }
-
-        const result = runCheckSum(listA, listB, target);
-
+        var checks = runChecks(listA, listB, target);
+    
+        if (checks.checksSuccessull === false) {
+            return res.status(400).json({ error: checks.error });
+        } 
+        
+        const result = checksum.runCheckSumMultiPair(listA, listB, target);
+    
         return res.json({ result });
     } catch (error) {
         return res.status(500).json({ error: error.toString() });
     }
-   });
+});
 
-   function runCheckSum(listA, listB, target) {
-        // !! Brute-Force => Bad runtime complexity
-        // TODO: Add some tuning to the algorithm
-        var res = {
-            result: false,
-            message:"no pair found"
-        }
-        listA.sort((a, b) => a - b);
-        listB.sort((a, b) => a - b);
-        // if the last/biggest numbers of both lists combined are smaller as the target => return false, as target can't be reached (target is too big)
-        // if first/lowest numbers of both lists combined are bigger as the target => return false, as target can't be reached (both lowest numbers are too big)
-        if (listA[listA.length - 1] + listB[listB.length - 1] < target || listA[0] + listB[0] > target) {
-            return res;
-        }
-        // calculate checksum
-        for (let i = 0; i < listA.length; i++) {
-            for (let j = 0; j < listB.length; j++) {
-                if (listA[i] + listB[j] === target) {
-                    res.result = true;
-                    res.message = listA[i]+ "+" + listB[j] + "=" + target
-                    break;
-                }
-            }
-        }
-        return res
-    }
+//    function runCheckSum(listA, listB, target) {
+//         // !! Brute-Force => Bad runtime complexity
+//         // TODO: Add some tuning to the algorithm
+//         var res = {
+//             result: false,
+//             message:"no pair found"
+//         }
+//         listA.sort((a, b) => a - b);
+//         listB.sort((a, b) => a - b);
+//         // if the last/biggest numbers of both lists combined are smaller as the target => return false, as target can't be reached (target is too big)
+//         // if first/lowest numbers of both lists combined are bigger as the target => return false, as target can't be reached (both lowest numbers are too big)
+//         if (listA[listA.length - 1] + listB[listB.length - 1] < target || listA[0] + listB[0] > target) {
+//             return res;
+//         }
+//         // calculate checksum
+//         for (let i = 0; i < listA.length; i++) {
+//             for (let j = 0; j < listB.length; j++) {
+//                 if (listA[i] + listB[j] === target) {
+//                     res.result = true;
+//                     res.message = listA[i]+ "+" + listB[j] + "=" + target
+//                     break;
+//                 }
+//             }
+//         }
+//         return res
+//     }
+
+function runChecks(listA, listB, target) {
+  // Run checks against the data from request data
+  // unnecessary checks, as already checked in api spec
+  // check if all needed data is present
+  if (!listA || !listB || !target) {
+    return {
+      checkSuccessfull: false,
+      error: "Missing/Wrong data in the request"
+    };
+  }
+  // check if both lists contains only numbers and not listA should not empty
+  if (!listA.every((num) => typeof num === "number") || listA.length == 0) {
+    return {
+        checkSuccessfull: false,
+      error: "List A should contain only numbers"
+    };
+  }
+  if (!listB.every((num) => typeof num === "number") || listB.length == 0) {
+    return {
+        checkSuccessfull: false,
+      error: "List B should contain only numbers"
+    };
+  }
+  // check if target is a number
+  if (typeof target !== "number") {
+    return {
+        checkSuccessfull: false,
+      error: "Target should be a number"
+    };
+  }
+  return {
+    checkSuccessfull: true
+  };
+}
 
 app.listen(3000, () => {
- console.log("Server running on port 3000");
+  console.log("Server running on port 3000");
 });
