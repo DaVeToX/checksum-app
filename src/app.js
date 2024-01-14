@@ -9,7 +9,7 @@ var app = express();
 app.use(bodyParser.json());
 
 // OpenAPI-Spezifikation
-// const apiSpec = yaml.load(path.join(__dirname, 'oneapi.yaml'));
+// const apiSpec = yaml.load('../api/oneapi.yaml');
 // const jsonSchema = compile(apiSpec);
 
 // Swagger-UI integration
