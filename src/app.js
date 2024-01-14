@@ -65,6 +65,7 @@ app.post("/checksum", (req, res) => {
                 if (listA[i] + listB[j] === target) {
                     res.result = true;
                     res.message = listA[i]+ "+" + listB[j] + "=" + target
+                    break;
                 }
             }
         }
