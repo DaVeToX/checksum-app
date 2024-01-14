@@ -1,20 +1,19 @@
 # checksum-app
 This is a spare time project, where I want to implement a small app that runs the well known checksum problem
+# Checksum App
+
+The Checksum app is a simple application that checks whether there is a pair in two lists of numbers whose sum corresponds to a certain target value.
+Two endpoints are offered.
+/checksumSinglePair
+and
+/checksumMultiPair
 
 # How to build the app
 ## Quick local testing
-- run:
-```sh
-node src/app.js
-```
-- proceed with **Test app**
+- Run ```node src/app.js ``` and proceed with **Test app**
 
 ## To run it in Docker
-- Run:
-```sh 
-docker build -t checksum .
-docker run -p 3000:3000 checksum
-```
+- Run ```docker build -t checksum .``` and ```docker run -p 3000:3000 checksum```
 
 ## Test app
 - Run a tool to test the app (e.g. Postman) and use the URL http://localhost:3000/checksumSinglePair or http://localhost:3000/checksumMultiPair with body:
