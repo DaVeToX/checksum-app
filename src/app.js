@@ -25,11 +25,11 @@ app.post("/checksum", (req, res) => {
         if (!listA || !listB || !target) {
             return res.status(400).json({ error: 'Missing/Wrong data in the request' });
         }
-        // check if both lists contains only numbers
-        if (!listA.every((num) => typeof num === 'number')) {
+        // check if both lists contains only numbers and not listA should not empty
+        if ((!listA.every((num) => typeof num === 'number')) || (listA.length == 0)) {
             return res.status(400).json({ error: 'List A should contain only numbers' });
         }
-        if (!listB.every((num) => typeof num === 'number')) {
+        if ((!listB.every((num) => typeof num === 'number')) || (listB.length == 0)) {
             return res.status(400).json({ error: 'List B should contain only numbers' });
         }
         // check if target is a number
