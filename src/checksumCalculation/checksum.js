@@ -11,33 +11,52 @@ function runCheckSumMultiPair(listA, listB, target, currentSum = 0, indexA = 0, 
     }
 
     // stop recursion if we reached the end of one of the lists
-    if (indexA >= listA.length || indexB >= listB.length) {
-        return {
-          result: false,
-          message: "no combination found",
-      };;
+    if ((indexA >= listA.length || indexB >= listB.length) && (currentSum !== target)) {
+      return {
+        result: false,
+        message: "no combination found",
+      };        
     }
 
     // Add next number from listA
-    const numbersFromListA = runCheckSumMultiPair(listA, listB, target, currentSum + listA[indexA], indexA + 1, indexB, currentNumbersA.concat(listA[indexA]), currentNumbersB);
-    if (numbersFromListA !== null) {
-        return numbersFromListA;
+    if (indexA < listA.length) {
+        const numbersFromListA = runCheckSumMultiPair(listA, listB, target, currentSum + listA[indexA], indexA + 1, indexB, currentNumbersA.concat(listA[indexA]), currentNumbersB);
+        if (numbersFromListA.result) {
+            return numbersFromListA;
+        }
     }
 
     // Add next number from listB
-    const numbersFromListB = runCheckSumMultiPair(listA, listB, target, currentSum + listB[indexB], indexA, indexB + 1, currentNumbersA, currentNumbersB.concat(listB[indexB]));
-    if (numbersFromListB !== null) {
-        return numbersFromListB;
+    if (indexB < listB.length) {
+        const numbersFromListB = runCheckSumMultiPair(listA, listB, target, currentSum + listB[indexB], indexA, indexB + 1, currentNumbersA, currentNumbersB.concat(listB[indexB]));
+        if (numbersFromListB.result) {
+            return numbersFromListB;
+        }
     }
 
     // Add both lists together
-    const numbersFromBothLists = runCheckSumMultiPair(listA, listB, target, currentSum + listA[indexA] + listB[indexB], indexA + 1, indexB + 1, currentNumbersA.concat(listA[indexA]), currentNumbersB.concat(listB[indexB]));
-    if (numbersFromBothLists !== null) {
-        return numbersFromBothLists;
+    if (indexA < listA.length && indexB < listB.length) {
+        const numbersFromBothLists = runCheckSumMultiPair(listA, listB, target, currentSum + listA[indexA] + listB[indexB], indexA + 1, indexB + 1, currentNumbersA.concat(listA[indexA]), currentNumbersB.concat(listB[indexB]));
+        if (numbersFromBothLists.result) {
+            return numbersFromBothLists;
+        }
     }
 
     // Skip current number from listA
-    return runCheckSumMultiPair(listA, listB, target, currentSum, indexA + 1, indexB, currentNumbersA, currentNumbersB);
+    if (indexA < listA.length) {
+        return runCheckSumMultiPair(listA, listB, target, currentSum, indexA + 1, indexB, currentNumbersA, currentNumbersB);
+    }
+
+    // Skip current number from listB
+    if (indexB < listB.length) {
+        return runCheckSumMultiPair(listA, listB, target, currentSum, indexA, indexB + 1, currentNumbersA, currentNumbersB);
+    }
+
+    return {
+        result: false,
+        message: "no combination found",
+    };
+
 }
 
 function runCheckSumSinglePair(listA, listB, target) {
