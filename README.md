@@ -25,7 +25,7 @@ and
 }
 ```
 - The result will be:
-```json
+```
 {
     "result": {
         "result": true/false,
