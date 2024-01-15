@@ -12,7 +12,10 @@ function runCheckSumMultiPair(listA, listB, target, currentSum = 0, indexA = 0, 
 
     // stop recursion if we reached the end of one of the lists
     if (indexA >= listA.length || indexB >= listB.length) {
-        return null;
+        return {
+          result: false,
+          message: "no combination found",
+      };;
     }
 
     // Add next number from listA
