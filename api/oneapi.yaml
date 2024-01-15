@@ -5,7 +5,7 @@ info:
   title: Checksum API
   version: 1.0.0
 paths:
-  /checksum:
+  /checksumSinglePair:
     post:
       summary: Take 2 lists containing integers and a target integer values and return true if 2 values combined are equal to the target value and a message
       requestBody:
@@ -18,19 +18,19 @@ paths:
                 listA:
                   type: array
                   items:
-                    type: number
+                    type: integer
                 listB:
                   type: array
                   items:
-                    type: number
+                    type: integer
                 target:
-                  type: number
+                  type: integer
               required:
                 - listA
                 - listB
                 - target
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
@@ -41,7 +41,7 @@ paths:
                     type: boolean
                   message:
                     type: string
-        '400':
+        "400":
           description: Bad request
           content:
             application/json:
@@ -50,7 +50,61 @@ paths:
                 properties:
                   error:
                     type: string
-        '500':
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /checksumMultiPair:
+    post:
+      summary: Take 2 lists containing integers and a target integer values and return true if multiple values combined are equal to the target value and a message
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                listA:
+                  type: array
+                  items:
+                    type: integer
+                listB:
+                  type: array
+                  items:
+                    type: integer
+                target:
+                  type: integer
+              required:
+                - listA
+                - listB
+                - target
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: boolean
+                  message:
+                    type: string
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        "500":
           description: Internal server error
           content:
             application/json:
