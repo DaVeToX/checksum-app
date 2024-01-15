@@ -39,7 +39,7 @@ app.post("/checksumMultiPair", (req, res) => {
         var { listA, listB, target } = req.body;
         var checks = runChecks(listA, listB, target);
     
-        if (checks.checksSuccessull === false) {
+        if (checks.checkSuccessfull === false) {
             return res.status(400).json({ error: checks.error });
         } 
         
@@ -50,33 +50,6 @@ app.post("/checksumMultiPair", (req, res) => {
         return res.status(500).json({ error: error.toString() });
     }
 });
-
-//    function runCheckSum(listA, listB, target) {
-//         // !! Brute-Force => Bad runtime complexity
-//         // TODO: Add some tuning to the algorithm
-//         var res = {
-//             result: false,
-//             message:"no pair found"
-//         }
-//         listA.sort((a, b) => a - b);
-//         listB.sort((a, b) => a - b);
-//         // if the last/biggest numbers of both lists combined are smaller as the target => return false, as target can't be reached (target is too big)
-//         // if first/lowest numbers of both lists combined are bigger as the target => return false, as target can't be reached (both lowest numbers are too big)
-//         if (listA[listA.length - 1] + listB[listB.length - 1] < target || listA[0] + listB[0] > target) {
-//             return res;
-//         }
-//         // calculate checksum
-//         for (let i = 0; i < listA.length; i++) {
-//             for (let j = 0; j < listB.length; j++) {
-//                 if (listA[i] + listB[j] === target) {
-//                     res.result = true;
-//                     res.message = listA[i]+ "+" + listB[j] + "=" + target
-//                     break;
-//                 }
-//             }
-//         }
-//         return res
-//     }
 
 function runChecks(listA, listB, target) {
   // Run checks against the data from request data
