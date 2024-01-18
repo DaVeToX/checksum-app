@@ -2,6 +2,8 @@ FROM node:14-alpine
 WORKDIR /usr/src/app
 COPY ["package.json", "package-lock.json*", "./"]
 RUN npm install 
+RUN npm install body-parser
+
 RUN chown -R node /usr/src/app
 # Run the application as a non-root user.
 USER node
