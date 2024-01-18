@@ -62,10 +62,13 @@ function runCheckSumMultiPair(listA, listB, target, currentSum = 0, indexA = 0, 
 function runCheckSumSinglePair(listA, listB, target) {
     // !! Brute-Force => Bad runtime complexity
     // TODO: Add some tuning to the algorithm
+    var pairs = [];
+    var seenNumbers = new Map(); // to store all already iterated numbers
     var res = {
       result: false,
       message: "no pair found",
     };
+
     listA.sort((a, b) => a - b);
     listB.sort((a, b) => a - b);
     // if the last/biggest numbers of both lists combined are smaller as the target => return false, as target can't be reached (target is too big)
@@ -77,22 +80,35 @@ function runCheckSumSinglePair(listA, listB, target) {
       return res;
     }
 
-    var seenNumbers = new Map(); // to store all already iterated numbers
-
     // calculate checksum
     for (var num of [...listA, ...listB]) {
       var differenceLeftover = target - num;
   
       if (seenNumbers.has(differenceLeftover)) {
-        res.result = true;
-        res.message = num + "+" + differenceLeftover + "=" + target;
-        break;
+        pairs.push([num, differenceLeftover]);
       }
   
       seenNumbers.set(num, differenceLeftover);
     }
 
+    if (pairs.length > 0) {
+      res.result = true;
+      res.message = createReturnMessage(pairs, target);
+    }
+
     return res;
+  }
+
+  function createReturnMessage(pairs, target) {
+    // return a list of all pairs that add up to the target value
+    var resString = "";
+    for (var pair of pairs) {
+      resString += pair[0] + "+" + pair[1] + "=" + target;
+      if (pairs.indexOf(pair) < pairs.length - 1) {
+        resString += ", ";
+      }
+    }
+    return resString;
   }
   
   module.exports = { runCheckSumSinglePair, runCheckSumMultiPair };
