@@ -1,5 +1,5 @@
 # checksum-app
-This is a spare time project, where I want to implement a small app that runs the well known checksum problem
+This is a spare time project, where I want to implement a small app that runs the well known checksum problem.
 # Checksum App
 
 The Checksum app is a simple application that checks whether there is a pair in two lists of numbers whose sum corresponds to a certain target value.
