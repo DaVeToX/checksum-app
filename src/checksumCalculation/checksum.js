@@ -76,16 +76,22 @@ function runCheckSumSinglePair(listA, listB, target) {
     ) {
       return res;
     }
+
+    var seenNumbers = new Map(); // to store all already iterated numbers
+
     // calculate checksum
-    for (let i = 0; i < listA.length; i++) {
-      for (let j = 0; j < listB.length; j++) {
-        if (listA[i] + listB[j] === target) {
-          res.result = true;
-          res.message = listA[i] + "+" + listB[j] + "=" + target;
-          break;
-        }
+    for (var num of [...listA, ...listB]) {
+      var differenceLeftover = target - num;
+  
+      if (seenNumbers.has(differenceLeftover)) {
+        res.result = true;
+        res.message = num + "+" + differenceLeftover + "=" + target;
+        break;
       }
+  
+      seenNumbers.set(num, differenceLeftover);
     }
+
     return res;
   }
   
